@@ -1,0 +1,65 @@
+structs are similar to classes but are used for smaller piece of data just two three values whereas classes are used for more complex data.
+note: this is just case with c++ other programming lsnguage there can be a lot of differences. also avoid using methods/functions inside a method.
+in struct by default the access modifiers are public. 
+//defining a struct
+struct trial{
+    string fname;
+    string lname; 
+//to make something private do below 
+//note private: is declare after all method variable declaration else it will make everything under it as private.
+    private:
+    string address;
+};
+// cllling or using a struct
+trial user;
+cout << "enter your first name: " ;
+cin >> user.fname;
+std::cout<< endl << user.fname;
+
+
+
+
+
+OOPs is based on the concepts of classes and objects 
+classes define the blueprint or the structure
+instances of the class is called as objects
+4 pillars of OOPs
+-encapsulation(Keeping the internal details of an object hidden and only exposing what’s necessary. Think: “What happens inside stays inside.”)
+-inheritance(One class can reuse features (like properties and methods) from another class. Think: “Child class gets traits from parent class.”)
+-polymorphism(One object can behave like many types depending on the context. Think: “Same action, different forms.”)
+-Abstraction(Showing only the essential features and hiding the complex stuff. Think: “Just the controls, not the wiring.”)
+
+members of classes includes- variables, methods and constructors. 
+these members of the classes will have access modifiers(public, private, protected)
+in classes the access modifiers by default are **private**.
+
+
+constructor is a special function/method inside the class with the same name as of the class. it is used to create a new object appropriately.
+this constructor is called everytime when someone tries to create a new object
+
+//operator overloading in classes
+
+static memberes - are not associated with each object but instead describe the class in general. (example number of user. so everytime user is created the count will be increase, but this value is no use for a specific object)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8:50:00
