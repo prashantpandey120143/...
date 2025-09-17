@@ -1,1 +1,535 @@
-hi
+!pip -q install python-telegram-bot==22.3 trafilatura==2.0.0 newspaper3k==0.2.8 \
+                 gTTS==2.5.4 moviepy==2.2.1 transformers==4.45.2 sentencepiece==0.2.0 \
+                 accelerate==0.34.2 pillow==10.4.0
+!apt -yqq install ffmpeg
+
+
+
+
+
+import os, getpass
+os.environ["TELEGRAM_BOT_TOKEN"] = getpass.getpass("Paste your Telegram Bot Token (hidden): ")
+
+
+
+
+
+import os, io, re, json, textwrap, math, tempfile, uuid
+from datetime import datetime
+import requests
+from urllib.parse import urlparse
+
+# Extraction
+from trafilatura import fetch_url, extract as trafi_extract  # docs show fetch_url + extract pattern
+# Fallback
+from newspaper import Article as NPArticle
+
+# Summarization
+import torch
+from transformers import pipeline
+
+# Media
+from gtts import gTTS
+from PIL import Image, ImageDraw, ImageFont
+from moviepy.editor import (ImageClip, AudioFileClip, concatenate_audioclips,
+                            CompositeAudioClip, concatenate_videoclips)
+from moviepy.video.fx.resize import resize
+
+# ---------- CONFIG ----------
+DEVICE = 0 if torch.cuda.is_available() else -1
+SUMM_MODEL = "sshleifer/distilbart-cnn-12-6"  # fast, good quality; you can switch to 'facebook/bart-large-cnn'
+TARGET_MAX_SECONDS = 60.0
+CANVAS = (720, 1280)  # 9:16 vertical
+SAFE_MARGIN = 0.90    # try to stay a bit under 60s
+
+# Load summarizer once (cached in Colab/HF cache)
+summarizer = pipeline("summarization", model=SUMM_MODEL, device=DEVICE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def extract_with_trafilatura(url: str):
+    """Return dict: {title, text, date, top_image} using Trafilatura."""
+    downloaded = fetch_url(url)
+    if not downloaded:
+        return None
+    # Ask for JSON with metadata; per docs this exposes metadata cleanly
+    data = trafi_extract(downloaded, output_format="json", with_metadata=True, include_comments=False)
+    if not data:
+        return None
+    obj = json.loads(data)
+    # Try OG image if provided by trafilatura (images in metadata appear in some outputs)
+    top_image = None
+    if "images" in obj and obj["images"]:
+        # Heuristic: first image that looks like a full image
+        candidates = [im.get("src") for im in obj["images"] if isinstance(im, dict) and "src" in im]
+        top_image = candidates[0] if candidates else None
+    return {
+        "title": obj.get("title"),
+        "text": obj.get("text") or obj.get("raw_text"),
+        "date": obj.get("date"),
+        "site": obj.get("sitename"),
+        "top_image": top_image
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def extract_with_newspaper(url: str):
+    """Fallback extraction using Newspaper3k."""
+    try:
+        art = NPArticle(url=url, language='en')
+        art.download(); art.parse()
+        # Try to get summary/keywords (optional)
+        try:
+            art.nlp()
+        except Exception:
+            pass
+        return {
+            "title": art.title,
+            "text": art.text,
+            "date": str(art.publish_date) if art.publish_date else None,
+            "site": urlparse(url).netloc,
+            "top_image": art.top_image if getattr(art, "top_image", None) else None
+        }
+    except Exception:
+        return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def extract_article(url: str):
+    data = extract_with_trafilatura(url)
+    if not data or not data.get("text"):
+        data = extract_with_newspaper(url)
+    if not data or not data.get("text"):
+        raise ValueError("Could not extract main article content. It may be paywalled or blocked.")
+    return data
+
+
+
+
+
+
+
+
+
+
+
+
+def clean_text(s: str):
+    return re.sub(r'\s+', ' ', s).strip()
+
+def summarize_to_script(title: str, text: str, site: str, date: str = None,
+                        max_words: int = 140):
+    # Summarize long text in chunks if needed (very long pages)
+    text = clean_text(text)
+    max_in = 2000  # tokens vs chars mismatch; heuristically keep chunks small
+    chunks = [text[i:i+4000] for i in range(0, len(text), 4000)] if len(text) > 4000 else [text]
+
+    summaries = []
+    for ch in chunks:
+        out = summarizer(ch, max_length=150, min_length=60, do_sample=False)[0]["summary_text"]
+        summaries.append(out)
+    summary = clean_text(" ".join(summaries))
+
+    # Structure for shorts: Hook → 3 bullets → Wrap
+    hook = clean_text(title) if title else "Here's the quick update:"
+    bullets = [s.strip() for s in re.split(r'(?<=[.!?])\s+', summary) if len(s.split()) > 4][:3]
+    if len(bullets) < 3:
+        # fallback: break by commas if sentences are short
+        parts = [p.strip() for p in re.split(r'[;,:]\s+', summary)]
+        for p in parts:
+            if len(bullets) >= 3: break
+            if len(p.split()) > 4: bullets.append(p)
+
+    wrap = "That’s the story in 60 seconds. Follow for more."
+    # Source tag (keeps video honest)
+    src = f"(Source: {site})" if site else ""
+
+    # Compose and enforce word budget
+    pieces = [hook] + bullets[:3] + [wrap]
+    words = " ".join(pieces).split()
+    if len(words) > max_words:
+        words = words[:max_words]
+    final = " ".join(words)
+
+    # Split back into segments roughly: hook / 3 bullets / wrap
+    # Rudimentary split by priority buckets
+    segments = []
+    remaining = final
+    # 1: hook
+    if hook and remaining.startswith(hook):
+        segments.append(("Hook", hook))
+        remaining = remaining[len(hook):].strip()
+    # bullets
+    for i in range(3):
+        m = re.search(r'(.+?[.!?])(\s|$)', remaining)
+        if not m:
+            break
+        seg = m.group(1).strip()
+        segments.append((f"Point {i+1}", seg))
+        remaining = remaining[len(seg):].strip()
+    # wrap
+    segments.append(("Wrap", wrap))
+
+    # attach source tag to final slide for transparency
+    if src:
+        segments[-1] = (segments[-1][0], segments[-1][1] + " " + src)
+
+    return segments
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Load a readable font
+import os
+from pathlib import Path
+FONT_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+if not Path(FONT_PATH).exists():
+    # fallback: PIL default font
+    FONT_PATH = None
+
+def wrap_text_for_width(draw, text, font, max_w, line_spacing=6):
+    # naive greedy wrap for PIL
+    words = text.split()
+    lines, cur = [], []
+    for w in words:
+        trial = " ".join(cur + [w])
+        w_px, h_px = draw.textbbox((0,0), trial, font=font)[2:]
+        if w_px <= max_w:
+            cur.append(w)
+        else:
+            lines.append(" ".join(cur))
+            cur = [w]
+    if cur: lines.append(" ".join(cur))
+    return lines
+
+def make_slide(text, bg_image=None, size=CANVAS, pad=48, font_size=44, bg_color=(18,18,22)):
+    W,H = size
+    if bg_image:
+        try:
+            im = Image.open(io.BytesIO(requests.get(bg_image, timeout=10).content)).convert("RGB")
+            # cover and blur
+            im = im.resize(size).filter(Image.Filter.GaussianBlur(2))
+        except Exception:
+            im = Image.new("RGB", size, bg_color)
+    else:
+        im = Image.new("RGB", size, bg_color)
+    overlay = Image.new("RGBA", size, (0,0,0,140))  # darken for readability
+    im = Image.alpha_composite(im.convert("RGBA"), overlay).convert("RGB")
+
+    draw = ImageDraw.Draw(im)
+    font = ImageFont.truetype(FONT_PATH, font_size) if FONT_PATH else ImageFont.load_default()
+
+    max_w = W - 2*pad
+    lines = wrap_text_for_width(draw, text, font, max_w)
+    # compute start
+    total_h = sum(draw.textbbox((0,0), ln, font=font)[3] for ln in lines) + (len(lines)-1)*8
+    y = (H - total_h)//2
+    for ln in lines:
+        w_px, h_px = draw.textbbox((0,0), ln, font=font)[2:]
+        x = (W - w_px)//2
+        draw.text((x,y), ln, fill=(255,255,255), font=font)
+        y += h_px + 8
+
+    buf = io.BytesIO()
+    im.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def tts_mp3(text, lang="en", tld="com"):
+    # gTTS free TTS (uses Google Translate). Needs internet.
+    # tld='co.uk' can give a British accent, 'co.in' Indian accent etc.
+    # (gTTS docs show tld for accents.) 
+    tts = gTTS(text=text, lang=lang, tld=tld, slow=False)
+    tmp = tempfile.NamedTemporaryFile(suffix=".mp3", delete=False)
+    tts.save(tmp.name)
+    return tmp.name
+
+def build_video(segments, top_image=None, out_path="short.mp4", target_seconds=TARGET_MAX_SECONDS):
+    # 1) build audio clips and measure durations
+    audio_segments, audio_durs = [], []
+    for label, text in segments:
+        mp3 = tts_mp3(text)
+        ac = AudioFileClip(mp3)
+        audio_segments.append(ac)
+        audio_durs.append(ac.duration)
+
+    total_audio = sum(audio_durs)
+    speed_factor = 1.0
+    if total_audio > target_seconds * SAFE_MARGIN:
+        # compress to fit
+        speed_factor = total_audio / (target_seconds * SAFE_MARGIN)
+        # speed up each segment
+        audio_segments = [ac.fx(vfx_audio_speedx, speed_factor) for ac in audio_segments]
+        audio_durs = [ac.duration for ac in audio_segments]
+
+    # 2) build slide clips aligned to audio durations
+    slide_clips = []
+    for i, ((label, text), dur) in enumerate(zip(segments, audio_durs)):
+        png_bytes = make_slide(text, bg_image=top_image, size=CANVAS)
+        img_clip = ImageClip(png_bytes).set_duration(dur)
+        slide_clips.append(img_clip)
+
+    # 3) concat video and audio
+    video = concatenate_videoclips(slide_clips, method="compose")
+    voice = concatenate_audioclips(audio_segments)
+    video = video.set_audio(voice)
+
+    # 4) write out (keep bitrate modest for Telegram 50 MB limit)
+    video.write_videofile(
+        out_path,
+        fps=30,
+        codec="libx264",
+        audio_codec="aac",
+        bitrate="1500k",          # ~ < 50MB @ 60s
+        audio_bitrate="128k",
+        threads=2,
+        preset="medium"
+    )
+    # cleanup temp mp3 files
+    for ac in audio_segments:
+        try:
+            os.unlink(ac.filename)
+        except Exception:
+            pass
+    return out_path
+
+# Helper: audio speed effect
+from moviepy.audio.fx.all import audio_speedx
+def vfx_audio_speedx(clip, factor):
+    return audio_speedx(clip, factor)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import asyncio
+from telegram import Update
+from telegram.constants import ChatAction
+from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, ContextTypes, filters
+
+BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+assert BOT_TOKEN, "Please set TELEGRAM_BOT_TOKEN environment variable."
+
+HELP_TEXT = (
+    "Hi! Send me a news/blog URL.\n"
+    "I'll extract the article, summarize it into a one‑minute shorts script, "
+    "and send you a vertical video (with voice-over).\n\n"
+    "Commands:\n"
+    "/start – show this help\n"
+    "/model – switch summarizer (distilbart|bart)\n"
+)
+
+CURRENT_MODEL = SUMM_MODEL
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(HELP_TEXT)
+
+async def switch_model(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global summarizer, CURRENT_MODEL
+    choice = (update.message.text.split(maxsplit=1)[1].strip().lower()
+              if len(update.message.text.split())>1 else "")
+    if choice in ["distilbart", "distil"]:
+        CURRENT_MODEL = "sshleifer/distilbart-cnn-12-6"
+    elif choice in ["bart", "bart-large"]:
+        CURRENT_MODEL = "facebook/bart-large-cnn"
+    else:
+        await update.message.reply_text("Use: /model distilbart  or  /model bart")
+        return
+    await update.message.reply_text(f"Switching model to {CURRENT_MODEL}. Downloading (once) ...")
+    # rebuild pipeline
+    device = 0 if torch.cuda.is_available() else -1
+    summarizer = pipeline("summarization", model=CURRENT_MODEL, device=device)
+    await update.message.reply_text("Model is ready!")
+
+def is_url(s: str):
+    try:
+        u = urlparse(s.strip())
+        return u.scheme in ("http","https") and u.netloc
+    except Exception:
+        return False
+
+async def handle_url(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    msg = update.message.text.strip()
+    if not is_url(msg):
+        await update.message.reply_text("Send me a valid http(s) URL.")
+        return
+
+    await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
+
+    try:
+        art = extract_article(msg)
+        title = art.get("title") or "News Update"
+        site  = art.get("site") or urlparse(msg).netloc
+        date  = art.get("date")
+        text  = art["text"]
+        top_image = art.get("top_image")
+
+        segments = summarize_to_script(title, text, site=site, date=date, max_words=140)
+
+        await update.message.reply_text(
+            "Working on it… extracting, summarizing, and rendering your 1‑minute short now. "
+            "This can take ~1–3 minutes the first time."
+        )
+        await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.UPLOAD_VIDEO)
+
+        out_file = f"/content/short_{uuid.uuid4().hex[:8]}.mp4"
+        video_path = build_video(segments, top_image=top_image, out_path=out_file, target_seconds=TARGET_MAX_SECONDS)
+
+        # Send video (bots: up to 50 MB)
+        await update.message.reply_video(
+            video=open(video_path, "rb"),
+            width=CANVAS[0], height=CANVAS[1],
+            caption=f"Your short is ready! ({os.path.basename(video_path)})"
+        )
+
+    except Exception as e:
+        await update.message.reply_text(f"Sorry, I couldn't create the short. Error: {e}")
+
+async def main():
+    app = ApplicationBuilder().token(BOT_TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("model", switch_model))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_url))
+    await app.run_polling(close_loop=False)  # will keep the cell alive
+
+asyncio.run(main())
+
+
+
+
+
+
+
