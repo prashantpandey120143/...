@@ -1,84 +1,135 @@
-%pip -q install --upgrade \
-  python-telegram-bot==22.3 \
-  trafilatura==2.0.0 \
-  newspaper3k==0.2.8 \
-  gTTS==2.5.4 \
-  moviepy==2.2.1 \
-  transformers==4.45.2 \
-  sentencepiece==0.2.0 \
-  accelerate==0.34.2 \
-  pillow==10.4.0 \
-  imageio-ffmpeg>=0.4.9
+"""
+Single-file Telegram bot: News URL → 1-minute vertical video short (voice-over + slides)
 
-!apt -yqq install ffmpeg > /dev/null
+- Paste your @BotFather token below (BOT_TOKEN)
+- Works in Google Colab or locally (auto-installs packages)
+- Extraction: Trafilatura (robust) with Newspaper3k fallback
+- Summarization: DistilBART CNN (fast) with option to switch to BART-Large via /model
+- TTS: gTTS (free; uses Google Translate speech)
+- Video: MoviePy v2 (vertical 9:16; safe bitrates to stay under ~50MB)
 
-import moviepy, sys, torch, platform, subprocess
-print("MoviePy:", moviepy.__version__)
-print("PyTorch CUDA:", torch.cuda.is_available(), "; device:", "cuda" if torch.cuda.is_available() else "cpu")
-print("Python:", sys.version.split()[0], "|", platform.system())
-!ffmpeg -version | head -n 1
+Commands:
+  /start                  Show help
+  /model distilbart|bart  Switch summarizer (distilbart is faster)
+  /voice us|uk|in         Select accent (us=default)
+"""
 
+# =========================  USER: PASTE YOUR TOKEN HERE  =========================
+BOT_TOKEN = "PASTE_YOUR_TELEGRAM_BOT_TOKEN_HERE"
+# ================================================================================
 
+# --------------------- Auto-install dependencies if needed ----------------------
+import sys, subprocess, os
 
-#@title ← Paste your Telegram Bot Token here and run this cell
-BOT_TOKEN = ""  # @param {type:"string"}
-import os
-assert BOT_TOKEN, "Please paste your token above, then run this cell."
-os.environ["TELEGRAM_BOT_TOKEN"] = BOT_TOKEN.strip()
-print("Token saved ✓")
+def pip_install(spec: str):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", spec])
 
+# Install all at once (safe to re-run; pip will skip if already satisfied)
+for spec in [
+    "python-telegram-bot==22.3",
+    "trafilatura==2.0.0",
+    "newspaper3k==0.2.8",
+    "gTTS==2.5.4",
+    "moviepy==2.2.1",
+    "transformers==4.45.2",
+    "sentencepiece==0.2.0",
+    "accelerate==0.34.2",
+    "pillow==10.4.0",
+    "imageio-ffmpeg>=0.4.9"
+]:
+    try:
+        __import__(spec.split("==")[0].split(">=")[0])
+    except Exception:
+        pip_install(spec)
 
-
-
-import os, io, re, json, math, tempfile, uuid, textwrap
+# ------------------------- Imports (after installation) -------------------------
+import io, re, json, uuid, tempfile
 from urllib.parse import urlparse
-from datetime import datetime
 
 import requests
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import numpy as np
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
+# ffmpeg: use imageio-ffmpeg binary (no apt needed)
+import imageio_ffmpeg
+os.environ["IMAGEIO_FFMPEG_EXE"] = imageio_ffmpeg.get_ffmpeg_exe()
 
 # Article extraction
-from trafilatura import fetch_url, extract as trafi_extract
-from newspaper import Article as NPArticle
+from trafilatura import fetch_url, extract as trafi_extract      # Trafilatura (robust)
+from newspaper import Article as NPArticle                       # Fallback
 
 # Summarization
 import torch
 from transformers import pipeline
 
-# Movie generation (MoviePy v2-friendly imports)
+# MoviePy v2-friendly imports (with v1 fallback where needed)
 try:
     from moviepy import (
-        ImageClip, AudioFileClip, CompositeAudioClip,
+        ImageClip, AudioFileClip,
         concatenate_audioclips, concatenate_videoclips
     )
 except Exception:
-    # fallback (older MoviePy v1)
-    from moviepy.editor import (
-        ImageClip, AudioFileClip, CompositeAudioClip,
+    from moviepy.editor import (  # pragma: no cover (older envs)
+        ImageClip, AudioFileClip,
         concatenate_audioclips, concatenate_videoclips
     )
-from moviepy.audio.fx.all import audio_speedx
+
+# Try to import the official audio_speedx (v2 path). If missing, supply a fallback.
+try:
+    from moviepy.audio.fx import audio_speedx as _audio_speedx
+    _HAS_AUDIO_SPEEDX = True
+except Exception:
+    _HAS_AUDIO_SPEEDX = False
+    from moviepy.audio.AudioClip import AudioClip
+    def _audio_speedx(clip, factor: float):
+        """
+        Fallback: simple time remap for audio.
+        out(t) = in(t * factor); duration shrinks by 'factor'.
+        """
+        fps = getattr(clip, "fps", 44100)
+        def make_frame(t):
+            t_in = t * factor
+            if t_in >= clip.duration:
+                # silence with same shape as first frame
+                arr0 = clip.get_frame(0)
+                return np.zeros_like(arr0)
+            return clip.get_frame(t_in)
+        new_dur = clip.duration / factor
+        return AudioClip(make_frame, duration=new_dur, fps=fps)
 
 # Telegram bot
 from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, ContextTypes, filters
 
-# ---------- GLOBAL CONFIG ----------
+# ---------------------------- Global configuration ------------------------------
+assert BOT_TOKEN and ":" in BOT_TOKEN, "❗Please paste a valid Telegram bot token at the top."
+
 DEVICE = 0 if torch.cuda.is_available() else -1
-SUMM_MODEL = "sshleifer/distilbart-cnn-12-6"  # fast default (switchable to 'facebook/bart-large-cnn')
+SUMM_MODEL = "sshleifer/distilbart-cnn-12-6"  # fast default; switch to 'facebook/bart-large-cnn' via /model
 TARGET_MAX_SECONDS = 60.0
-SAFE_MARGIN = 0.90
-CANVAS = (720, 1280)  # Vertical 9:16
+SAFE_MARGIN = 0.90                     # keep a buffer under 60s
+CANVAS = (720, 1280)                   # vertical 9:16
 DEFAULT_FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+CURRENT_TLD = "com"                    # gTTS accent: 'com' (US), 'co.uk' (UK), 'co.in' (India)
+
+# Build summarizer (cached by HF)
+summarizer = pipeline("summarization", model=SUMM_MODEL, device=DEVICE)
 
 
+# ================================== Utilities ==================================
+def clean_text(s: str) -> str:
+    return re.sub(r"\s+", " ", s or "").strip()
+
+def is_url(s: str) -> bool:
+    try:
+        u = urlparse((s or "").strip())
+        return u.scheme in ("http","https") and u.netloc
+    except Exception:
+        return False
 
 
-
-# ------------------- Extraction -------------------
-
+# ============================== Content extraction ==============================
 def extract_with_trafilatura(url: str):
     downloaded = fetch_url(url)
     if not downloaded:
@@ -95,7 +146,7 @@ def extract_with_trafilatura(url: str):
         "title": obj.get("title"),
         "text": obj.get("text") or obj.get("raw_text"),
         "date": obj.get("date"),
-        "site": obj.get("sitename") or urlparse(url).netloc,
+        "site": obj.get("sitename"),
         "top_image": top_image
     }
 
@@ -106,7 +157,7 @@ def extract_with_newspaper(url: str):
         try: art.nlp()
         except Exception: pass
         return {
-            "title": art.title or "News Update",
+            "title": art.title,
             "text": art.text,
             "date": str(art.publish_date) if art.publish_date else None,
             "site": urlparse(url).netloc,
@@ -121,64 +172,53 @@ def extract_article(url: str):
         data = extract_with_newspaper(url)
     if not data or not data.get("text"):
         raise ValueError("Could not extract main article content (may be paywalled or blocked).")
+    if not data.get("site"):
+        data["site"] = urlparse(url).netloc
+    if not data.get("title"):
+        data["title"] = "News Update"
     return data
 
-# ------------------- Summarization -------------------
 
-def clean_text(s: str):
-    return re.sub(r"\s+", " ", s or "").strip()
-
-# Build summarizer once (cached by HF)
-summarizer = pipeline("summarization", model=SUMM_MODEL, device=DEVICE)
-
+# ================================= Summarization ================================
 def summarize_to_segments(title: str, text: str, site: str, max_words: int = 140):
+    """
+    Build a shorts-style script: Hook → 3 points → Wrap (<= ~140 words).
+    """
     text = clean_text(text)
-    # Chunk very long text for better summarization stability
     chunks = [text[i:i+4000] for i in range(0, len(text), 4000)] if len(text) > 4000 else [text]
-    partials = []
+    outs = []
     for ch in chunks:
         out = summarizer(ch, max_length=150, min_length=60, do_sample=False)[0]["summary_text"]
-        partials.append(clean_text(out))
-    summary = clean_text(" ".join(partials))
+        outs.append(clean_text(out))
+    summary = clean_text(" ".join(outs))
 
-    # Shorts script shape: Hook → 3 points → Wrap
     hook = clean_text(title) if title else "Here’s the quick update:"
-    # Split into sentences and take up to 3 good ones
     sentences = [s.strip() for s in re.split(r'(?<=[.!?])\s+', summary) if len(s.split()) > 4]
     bullets = sentences[:3] if sentences else [summary]
-
     wrap = "That’s the story in 60 seconds. Follow for more."
     src = f"(Source: {site})" if site else ""
 
     pieces = [hook] + bullets[:3] + [wrap]
-    # Enforce word budget
     words = " ".join(pieces).split()
     if len(words) > max_words:
         words = words[:max_words]
-    final_text = " ".join(words)
+    full = " ".join(words)
 
-    # Re-split into segments (heuristic)
     segments = []
-    # Hook
-    if final_text.startswith(hook):
+    if full.startswith(hook):
         segments.append(("Hook", hook))
-        rest = final_text[len(hook):].strip()
+        rest = full[len(hook):].strip()
     else:
-        rest = final_text
-
-    # Try to carve out up to 3 sentences for points
+        rest = full
     pts = [s.strip() for s in re.split(r'(?<=[.!?])\s+', rest) if s.strip()]
     for i, seg in enumerate(pts[:3]):
         segments.append((f"Point {i+1}", seg))
-
-    # Wrap (ensure source tag visible)
-    last = wrap + (" " + src if src else "")
-    segments.append(("Wrap", last))
+    segments.append(("Wrap", wrap + (" " + src if src else "")))
     return segments
 
-# ------------------- Slides (PIL) -------------------
 
-def wrap_text(draw, text, font, max_w):
+# ============================= Slide rendering (PIL) ============================
+def _wrap_text(draw, text, font, max_w):
     words, lines, cur = text.split(), [], []
     for w in words:
         trial = " ".join(cur + [w])
@@ -201,7 +241,6 @@ def make_slide_png(text, bg_image=None, size=CANVAS, pad=48, font_size=44, bg_co
             im = Image.new("RGB", size, bg_color)
     else:
         im = Image.new("RGB", size, bg_color)
-
     overlay = Image.new("RGBA", size, (0,0,0,140))
     im = Image.alpha_composite(im.convert("RGBA"), overlay).convert("RGB")
 
@@ -212,12 +251,11 @@ def make_slide_png(text, bg_image=None, size=CANVAS, pad=48, font_size=44, bg_co
         font = ImageFont.load_default()
 
     max_w = W - 2*pad
-    lines = wrap_text(draw, text, font, max_w)
+    lines = _wrap_text(draw, text, font, max_w)
     total_h = sum(draw.textbbox((0,0), ln, font=font)[3] for ln in lines) + (len(lines)-1)*8
     y = (H - total_h)//2
     for ln in lines:
-        bbox = draw.textbbox((0,0), ln, font=font)
-        w_px, h_px = bbox[2], bbox[3]
+        w_px, h_px = draw.textbbox((0,0), ln, font=font)[2:]
         x = (W - w_px)//2
         draw.text((x,y), ln, fill=(255,255,255), font=font)
         y += h_px + 8
@@ -231,8 +269,8 @@ def png_bytes_to_clip(png_bytes, duration):
     frame = np.array(im)
     return ImageClip(frame).set_duration(duration)
 
-# ------------------- TTS + Video -------------------
 
+# ============================ TTS + video composition ===========================
 from gtts import gTTS
 
 def tts_to_mp3(text, lang="en", tld="com"):
@@ -241,64 +279,51 @@ def tts_to_mp3(text, lang="en", tld="com"):
     tts.save(tmp.name)
     return tmp.name
 
-def build_video(segments, top_image=None, out_path="short.mp4", target_seconds=TARGET_MAX_SECONDS,
-                tld="com"):
-    # 1) TTS for each segment
-    audio_clips, durs, temp_files = [], [], []
-    for label, text in segments:
+def build_video(segments, top_image=None, out_path="short.mp4",
+                target_seconds=TARGET_MAX_SECONDS, tld="com"):
+    # Build audio per segment
+    audio_clips, durs, tmp_files = [], [], []
+    for _, text in segments:
         mp3 = tts_to_mp3(text, tld=tld)
-        temp_files.append(mp3)
+        tmp_files.append(mp3)
         ac = AudioFileClip(mp3)
         audio_clips.append(ac)
         durs.append(ac.duration)
 
     total = sum(durs)
-    speed_factor = 1.0
     if total > target_seconds * SAFE_MARGIN:
-        speed_factor = total / (target_seconds * SAFE_MARGIN)
-        audio_clips = [audio_speedx(ac, speed_factor) for ac in audio_clips]
+        factor = total / (target_seconds * SAFE_MARGIN)  # >1 → speed up
+        audio_clips = [_audio_speedx(ac, factor) for ac in audio_clips]
         durs = [ac.duration for ac in audio_clips]
 
-    # 2) Slides aligned to audio durations
-    slide_clips = []
+    # Slides matching audio durations
+    slides = []
     for (label, text), dur in zip(segments, durs):
         png = make_slide_png(text, bg_image=top_image, size=CANVAS)
-        slide_clips.append(png_bytes_to_clip(png, dur))
+        slides.append(png_bytes_to_clip(png, dur))
 
-    video = concatenate_videoclips(slide_clips, method="compose")
+    video = concatenate_videoclips(slides, method="compose")
     voice = concatenate_audioclips(audio_clips)
     video = video.set_audio(voice)
 
-    # 3) Export: keep bitrate modest to fit Telegram 50MB limit
+    # Encode with modest bitrates to stay well under Telegram 50MB limit for bots
     video.write_videofile(
-        out_path,
-        fps=30,
-        codec="libx264",
-        audio_codec="aac",
-        bitrate="1200k",
-        audio_bitrate="128k",
-        threads=2,
-        preset="medium",
-        verbose=False,
-        logger=None
+        out_path, fps=30, codec="libx264", audio_codec="aac",
+        bitrate="1200k", audio_bitrate="128k",
+        threads=2, preset="medium", verbose=False, logger=None
     )
 
-    # Cleanup audio temps
+    # Cleanup
     try:
         for ac in audio_clips: ac.close()
-        for f in temp_files:
+        for f in tmp_files:
             if os.path.exists(f): os.unlink(f)
     except Exception:
         pass
-
     return out_path
 
 
-
-
-BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-assert BOT_TOKEN, "Token missing — run Step 2."
-
+# ================================ Telegram bot ==================================
 HELP_TEXT = (
     "Send me a news/blog URL and I’ll return a 1‑minute vertical short "
     "with voice‑over and key points.\n\n"
@@ -308,36 +333,23 @@ HELP_TEXT = (
     "/voice us|uk|in – choose accent (us=default)\n"
 )
 
-CURRENT_MODEL = SUMM_MODEL
-CURRENT_TLD = "com"  # us accent by default; 'co.uk' for UK, 'co.in' for India
-
-def is_url(s: str):
-    try:
-        u = urlparse(s.strip())
-        return u.scheme in ("http","https") and u.netloc
-    except Exception:
-        return False
-
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(HELP_TEXT)
 
 async def cmd_model(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global summarizer, CURRENT_MODEL
+    global summarizer, SUMM_MODEL
     parts = update.message.text.split()
     if len(parts) < 2:
         await update.message.reply_text("Use: /model distilbart  or  /model bart")
         return
     choice = parts[1].lower()
     if choice.startswith("distil"):
-        CURRENT_MODEL = "sshleifer/distilbart-cnn-12-6"
-    elif choice.startswith("bart"):
-        CURRENT_MODEL = "facebook/bart-large-cnn"
+        SUMM_MODEL = "sshleifer/distilbart-cnn-12-6"
     else:
-        await update.message.reply_text("Unknown model. Use: distilbart | bart")
-        return
-    await update.message.reply_text(f"Switching model to {CURRENT_MODEL}. Downloading (first time) …")
+        SUMM_MODEL = "facebook/bart-large-cnn"
+    await update.message.reply_text(f"Switching to {SUMM_MODEL}… (first use may download the model)")
     device = 0 if torch.cuda.is_available() else -1
-    summarizer = pipeline("summarization", model=CURRENT_MODEL, device=device)
+    summarizer = pipeline("summarization", model=SUMM_MODEL, device=device)
     await update.message.reply_text("Model ready ✓")
 
 async def cmd_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -346,10 +358,8 @@ async def cmd_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if len(parts) < 2:
         await update.message.reply_text("Use: /voice us|uk|in")
         return
-    v = parts[1].lower()
-    if v == "uk": CURRENT_TLD = "co.uk"
-    elif v == "in": CURRENT_TLD = "co.in"
-    else: CURRENT_TLD = "com"
+    t = parts[1].lower()
+    CURRENT_TLD = {"uk":"co.uk","in":"co.in"}.get(t, "com")
     await update.message.reply_text(f"Voice accent set ✓ (tld={CURRENT_TLD})")
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -357,8 +367,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not is_url(msg):
         await update.message.reply_text("Please send a valid http(s) URL.")
         return
-
     await context.bot.send_chat_action(update.effective_chat.id, ChatAction.TYPING)
+
     try:
         art = extract_article(msg)
         title = art.get("title") or "News Update"
@@ -368,33 +378,32 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         segments = summarize_to_segments(title, text, site=site, max_words=140)
 
-        await update.message.reply_text("Creating your 1‑minute short… This may take ~1–3 minutes initially.")
+        await update.message.reply_text("Creating your 1‑minute short… First run may take ~1–3 minutes.")
         await context.bot.send_chat_action(update.effective_chat.id, ChatAction.UPLOAD_VIDEO)
 
-        out_file = f"/content/short_{uuid.uuid4().hex[:8]}.mp4"
-        video_path = build_video(segments, top_image=top_image, out_path=out_file, target_seconds=TARGET_MAX_SECONDS,
-                                 tld=CURRENT_TLD)
+        out_file = f"./short_{uuid.uuid4().hex[:8]}.mp4"
+        video_path = build_video(segments, top_image=top_image, out_path=out_file,
+                                 target_seconds=TARGET_MAX_SECONDS, tld=CURRENT_TLD)
 
-        await update.message.reply_video(
-            video=open(video_path, "rb"),
-            width=CANVAS[0], height=CANVAS[1],
-            caption="Your short is ready! 🎬"
-        )
+        with open(video_path, "rb") as vf:
+            await update.message.reply_video(
+                video=vf, width=CANVAS[0], height=CANVAS[1],
+                caption="Your short is ready! 🎬"
+            )
+
     except Exception as e:
         await update.message.reply_text(f"Sorry, I couldn't process that. Error: {e!s}")
 
-async def main():
+
+def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", cmd_start))
     app.add_handler(CommandHandler("model", cmd_model))
     app.add_handler(CommandHandler("voice", cmd_voice))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
-    await app.run_polling(close_loop=False)
+    # Long polling (no webhook/server needed; perfect for Colab)
+    app.run_polling()
 
-import asyncio
-asyncio.run(main())
-
-
-
-
-
+if __name__ == "__main__":
+    print("Starting bot… (Ctrl/Cmd + M, then I to interrupt in Colab)")
+    main()
