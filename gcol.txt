@@ -7,8 +7,12 @@
 
 
 
-import os, getpass
-os.environ["TELEGRAM_BOT_TOKEN"] = getpass.getpass("Paste your Telegram Bot Token (hidden): ")
+#@title ← Paste your Telegram Bot Token here and run this cell once
+BOT_TOKEN = ""  # @param {type:"string"}
+import os
+assert BOT_TOKEN, "Please paste your token above, then run the cell."
+os.environ["TELEGRAM_BOT_TOKEN"] = BOT_TOKEN.strip()
+print("Token saved in environment ✓")
 
 
 
