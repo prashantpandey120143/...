@@ -1,0 +1,1321 @@
+"software process model:
+1. Build and Fix Model- It is a simple two phase model. In one phase, code is developed and in another, code is fixed.  
+
+2. Rapid Application Development (RAD 
+Model) -an upgrade of the linear 
+sequential model in which the rapid 
+development is accomplished by using 
+component-based construction. 
+RAD contains the following phases:  
+-business modelling
+-data modelling
+-process modelling
+-application generation
+-testing and turnover
+
+3. Capability Maturity Models :
+It defines five maturity levels:
+
+-Level 1 - The Initial Level 
+At the Initial Level, the organization typically does not provide a stable environment for developing and maintaining software
+
+-Level 2 - The Repeatable Level 
+The organization satisfies all the requirements of level
+1. At this level, basic project management policies and 
+related procedures are established. 
+
+-Level 3 (Defined): 
+The organization satisfies all the 
+requirements of level-2. At this maturity level, the 
+software development processes are well defined, 
+managed and documented. Training is imparted to staff 
+to gain the required knowledge. 
+
+-Level 4 (Managed): 
+The organization satisfies all the 
+requirements of level-3. At this level quantitative 
+standards are set for software products and processes. 
+The project analysis is done at integrated 
+organizational level 
+
+-Level 5 (Optimizing): The organization satisfies all 
+the requirements of level-4. This is last level. The 
+organization at this maturity level is considered almost 
+perfect. At this level, the entire organization 
+continuously works for process improvement with the 
+help of quantitative feedback obtained from lower 
+level.  and collective database is created. 
+
+
+==================================================
+
+Requirements Engineering- is the systematic use of proven principles, techniques and language tools for the cost effective analysis, documentation,on going evaluation of user’s needs and the specification of external behavior of a system to 
+satisfy those user needs. 
+
+based on functionality, the requirements are 
+classified into the following two types:  
+Functional requirements: They define the factors like, 
+I/O formats, storage structure, computational 
+capabilities, timing and synchronization.  
+ii) Non-functional requirements: They define the properties 
+or qualities of a product including usability, efficiency, 
+performance, space, reliability, portability etc. 
+
+
+Software Requirements Specification 
+(SRS) is a perfect detailed description of 
+the behavior of the system to be 
+developed. That is SRS document is an 
+agreement between the developer and the 
+Software Requirements Specification 
+(SRS) is a perfect detailed description of 
+the behavior of the system to be developed. 
+That is SRS document is an agreement 
+between the developer and the customer 
+customer covering the functional and non 
+functional requirements of the software to 
+be developed. 
+SRS is considered as a contract between 
+covering the functional and non functional 
+requirements of the software to be 
+developed. 
+SRS is considered as a contract between 
+the customer and the developer.
+
+
+structure of srs: 
+-title 
+-table of contents
+-introduction
+	-purpose
+	-scope
+	-definitions
+	-reference
+	-overall
+-overall descroption
+	-product perspective
+	-product functionalities
+	-usr characterstics
+	-constraints
+	-assumption and dependencies
+-specific requirement
+	-functions
+	-logical database requirements
+	-object oriented model
+	-performane requirement
+-appendices
+-index
+
+
+======================
+
+requirements gathering is an art. The 
+person who gathers requirements should have 
+knowledge of what and when to gather 
+information and by what resources.  
+primary tools used: 
+1. Record review: A review of recorded 
+documents of the organization is performed. 
+Procedures, manuals, forms and books are 
+reviewed to see format and functions of present 
+system
+2. On site observation: In case of real life 
+systems, the actual site visit is performed to get a 
+close look of system. It helps the analyst to detect 
+the problems of existing system.  
+3. Interview: A personal interaction with staff is 
+performed to identify their requirements. It 
+requires experience of arranging the interview, 
+setting the stage, avoiding arguments and 
+evaluating the outcome.
+4. Questionnaire: It is an effective tool which 
+requires less effort and produces a written 
+document about requirements. It examines a 
+large number of respondents simultaneously 
+and gets customized answers.
+
+=================================
+
+System modeling is the process of developing 
+abstract models of a system, with each model 
+presenting a different view or perspective of 
+that system.  
+1.Environmental 
+model: 
+indicates 
+environment in which system exists. Any big or 
+It 
+small system is a sub-system of a larger system.
+2. Behavioral models are used to describe the overall 
+behavior of a system. The tools used to make this 
+model are: Data Flow Diagrams (DFD), E-R 
+diagrams, Data Dictionary & Process Specification.  
+(explain in short about all i.e. DFD,E-R, etc)
+=================================
+
+
+Software Design {check from attachment and write notes}
+Data Design {check from attachment and write notes}
+Architectural Design {check from attachment and write notes}
+Modular Design {The concept of modular approach has been derived 
+from the fundamental concept of “divide and 
+conquer”.  
+Modularity is the only attribute of a software product 
+that makes it manageable and maintainable.}
+
+While modularity is good for 
+software quality, independence 
+between various modules are even 
+batter for software quality and 
+manageability, independence is 
+measured by two parameters  
+ Cohesion  Cohesion is a measure of functional 
+strength of a software module. This is the 
+degree of interaction between statement in 
+a module.  
+types(from bad to best):
+Coincidental -> Logical -> Procedural -> Communicational
+
+ Coupling - Coupling is defined as degree to which a 
+module interacts and communicates with 
+another module to perform certain task.  
+
+Types of Coupling  
+(From best (lowest level of coupling) to worst (high level of 
+coupling ) 
+Data Coupling: Modules interact through parameters.  
+Module X passes parameter A to Module Y. 
+Stamp coupling: Modules shares composite data structure. 
+Control coupling: One module control logic flow of 
+another module. For exp : passing a flag to another module 
+which determines the sequence of action to be performed in 
+the other module depending on the value of flag such as true 
+or false. 
+External coupling: Modules shares external data 
+format. Mostly used in communication protocols 
+and device interfaces.  
+Content coupling: One module modifies the data 
+of another module. 
+Sequential: Output from one element is input to 
+some other element in module. Such modules 
+operates on some data structure. 
+Functional: Modules contain elements that 
+perform exactly one function. 
+
+===========================
+
+Quality Assurance:
+The objective of the software quality 
+assurance process is to produce high quality 
+software that meets customer requirements 
+through a process of applying various 
+procedures and standards. 
+Attributes of Quality :
+Auditability : The ability of software being 
+tested against conformance to standard.  
+Compatibility : The ability of two or more 
+systems or components to perform their required 
+functions while sharing the same hardware or 
+software environment.  
+Completeness: The degree to which all of the 
+software’s required functions and design 
+constraints are present and fully developed in 
+the requirements specification, design document 
+and code.  
+Consistency: The degree of uniformity, 
+standardization, and freedom from contradiction 
+among the documents or parts of a system or 
+component.  
+Correctness: The degree to which a system or 
+component is free from faults in its 
+specification, design, and implementation. The 
+degree to which software, documentation meet 
+specified requirements.
+Testability: The degree to which a system or 
+component facilitates the establishment of test 
+criteria and the performance of tests to 
+determine whether those criteria have been met.
+Understandability: The degree to which the 
+meaning of the SRS, SDD, and code are clear 
+and understandable to the reader.  
+Verifiability : The degree to which the SRS, 
+SDD, and code have been written to facilitate 
+verification and testing.  
+
+----
+
+Characteristics of software quality  
+Number of design changes required  
+ Number of errors in the code  
+ Number of bugs during different stages 
+of testing  
+ Reliability metrics  
+ It measures the mean time to failure 
+(MTTF), that may be defined as 
+probability of failure during a particular 
+interval of time. This will be discussed in 
+software reliability.  
+
+Review of Source Code  
+•Completeness  
+•Consistency  
+•Correctness  
+•Modifiability  
+•Traceability 
+•Understandability 
+•Software testing & implementation 
+phase 
+•Installation 
+
+----------------
+Software Reliability  :
+measured per a 
+unit of time, whereas probability of failure is 
+generally time independent. These two 
+measures can be easily related if you know the 
+frequency with which inputs are executed per 
+unit of time. Mean-time-to-failure (MTTF) is 
+the average interval of time between failures; 
+this is also sometimes referred to as Mean
+time-before-failure. 
+Definitions of Software reliability  
+•IEEE Definition: The probability that software will 
+not cause the failure of a system for a specified time 
+under specified conditions. The probability is a 
+function of the inputs to and use of the system in the 
+software. The inputs to the system determine 
+whether existing faults, if any, are encountered.  
+•The ability of a program to perform its required 
+functions accurately and reproducibly under stated 
+conditions for a period of time. 
+
+
+ software metric is a quantitative measure 
+of a degree to which a software system or 
+process possesses some property. 
+Metrics deal with measurement of the 
+software process and the software product. 
+Metrics quantify the characteristics of a 
+process or a product. Metrics are often used 
+to estimate project cost and project schedule.  
+
+Goal  
+Of  
+Metrics 
+To improve product quality and 
+development-team productivity. 
+Concerned with productivity and quality 
+measures 
+Measures of SW development output as 
+function of effort and time 
+•Measures of usability 
+
+Metrics can be broadly divided into 
+two categories: 
+•Product Metrics  are measures of the software 
+product at any stage of its development, from 
+requirements to installed system.  Product 
+metrics may measure:  
+•The complexity of the software design 
+•The size of the final program 
+•The number of pages of documentation 
+produced
+
+•Process Metrics 
+
+
+
+
+Function point : Function point metrics instead of 
+LOC measures the functionality of the program. 
+Based on “functionality” delivered by the software 
+Functionality is measured indirectly using a measure 
+called function point. 
+Function points (FP) - derived using an empirical 
+relationship based on countable measures of software 
+& assessments of software complexity. 
+In a Function point analysis, the following 
+features are considered:  
+External inputs : A process by which data 
+crosses the boundary of the system. Data may 
+be used to update one or more logical files. 
+External outputs : A process by which data 
+crosses the boundary of the system to outside 
+of the system. It can be a user report or a 
+system log report. 
+ 
+
+=======================
+
+The four basic steps in software project estimation are: 
+1) Estimating the size of project. There are many 
+procedures available for estimating the size of a project 
+which are based on quantitative approaches like 
+estimating Lines of Code or estimating the functionality 
+requirements of the project called Function point.  
+2) Estimate the effort in person-months or person-hours. 
+3) Estimate the schedule in calendar months. 
+4) Estimate the project cost in dollars (or local currency) 
+
+
+--------------------
+
+COCOMO Model  
+COCOMO stands for Constructive Cost 
+Model. It was introduced by Barry Boehm.  
+It provides the following three level of 
+models: 
+ Basic COCOMO :We use single variable 
+COCOMO, where a quick and rough 
+estimate of cost of a software project is to 
+be done. However, it is not very accurate. 
+ Intermediate COCOMO:   
+The static 
+multi-variable model takes care of the cost 
+drivers which could not be handled in the 
+single variable model. 
+ Detailed COCOMO : This model computes 
+development effort and cost which 
+incorporates 
+all 
+characteristics 
+of 
+intermediate level with assessment of cost 
+implication on each step of development 
+(analysis, design, testing etc.) 
+
+This model may be applied to three classes of 
+software projects as given below:  
+ Organic : Small size project. A simple 
+software project where the development 
+team has good experience of the application  
+ Semi-detached : An intermediate size 
+project and project is based on rigid and 
+semi-rigid requirements.
+
+ Embedded : The project developed under 
+hardware, software and operational constraints.  
+ In the COCOMO model, the development effort 
+equation assumes the following form: E = aSb m  
+ here a and b are constraints that are 
+determined for each model.  
+ E = Effort ,S = Value of source in LOC ,m = 
+multiplier that is determined from a set of 15 
+cost driver’s attributes. 
+
+-------------------
+
+L. H. Putnam developed a dynamic multivariate 
+model of the software development process based 
+on the assumption that distribution of effort over the 
+life of software development is described by the 
+Rayleigh-Norden curve.  
+P = Kt exp(t2/2T2) / T2  
+P = No. of persons on the project at time ‘t’  
+K = The area under Rayleigh curve which is equal 
+to total life cycle effort  
+T = Development time
+
+---------------------
+
+C.E. Walston and C.P. Felix developed a simple empirical 
+model of software development effort with respect to 
+number of lines of code. In this model, LOC is assumed to 
+be directly related to development effort as given below:  
+E = a Lb   Where L = Number of Lines of Code (LOC)  
+E = total effort required  
+a and b are parameters obtained from regression analysis of 
+data. The final equation is of the following form:  
+E = 5.2 L0.91
+
+
+
+
+
+
+
+======================================
+
+
+Different Types of Software risks  
+1  Lack of Knowledge 
+2 Poor knowledge of tools 
+3 Management Issues  
+4 Updates in the hardware resources 
+5 Customer Risks 
+6 External Risks 
+7 Commercial Risks
+
+Management Of Risks  
+1. Risk Avoidance  
+a. Risk anticipation  
+b. Risk tools 
+
+2. Risk Detection  
+a. Risk analysis  
+b. Risk category  
+c. Risk prioritization  
+
+3. Risk Status/Control   
+a. Risk pending  
+b. Risk resolution  
+c. Risk not solvable 
+
+4. Risk Recovery  
+a. Full  
+b. Partial  
+c. Extra/alternate 
+features 
+
+
+
+=================================
+
+“Testing is an activity in which a system or 
+component is executed under specified 
+conditions; the results are observed and 
+recorded and an evaluation is made of some 
+aspect of the system or component. 
+
+
+Black-box testing is software testing 
+method that deals with the functional 
+requirements of the software. Black-box 
+testing is also known as behavioral testing 
+and is a complementary approach that is 
+likely to uncover a different class of errors 
+than white-box methods. 
+ Test cases are derived from 
+formal specification of the 
+system. 
+ Test case selection can be 
+done without any reference to 
+the program design or code. 
+ Only tests the functionality 
+and features of the program, 
+Not the internal operation.
+Steps:
+Graph-Based Testing Methods 
+The software testing begins by creating 
+a graph of objects and their 
+relationships. Once the graph has been 
+created, each object and relationship is 
+exercised. Then, a series of tests are 
+devised to uncover errors. 
+Equivalence partitioning  
+This method divides the input domain 
+of a program into classes of data from 
+which test cases can be derived. It tries 
+hard to define test case, which can 
+uncover classes of errors, thus reducing 
+the number of test cases needed. 
+Boundary value analysis 
+Boundary Value Analysis (BVA) is a test case design 
+method that complements equivalence partitioning. 
+Instead of selecting any element of an equivalence 
+class, it selects the test cases at the "edges” of the 
+class. BVA derives test cases from the output domain, 
+instead of input. Boundary value analysis leads to a 
+selection of test cases that exercise bounding values. 
+As, most of the errors occur at boundaries of the 
+input domain, rather in the center. Following are the 
+guidelines for Boundary value analysis (BVA), which 
+are similar to that of equivalence partitioning: 
+If input condition = (a,…, b), Bounded by a and 
+b then, test cases should be designed with values a 
+and b and just above and just below a and b.  
+If input condition = Number of values, then test 
+cases should be developed that exercise the 
+minimum and maximum numbers. Values just 
+above and below minimum and maximum are also 
+tested.  
+If internal program data structures have 
+prescribed boundaries, then test cases should be 
+developed that exercise the data structure at its 
+boundary. 
+
+
+
+White-box testing is one of the software 
+testing methods that checks the internal 
+working of an application. It uses 
+control structure of the procedural 
+design to derive test cases. White-box 
+testing is also known as glass-box 
+testing. 
+In this approach, complete knowledge 
+about the internal structure of the source 
+code is required. For White-box testing 
+strategies, the methods are:  
+Coverage Based Testing 
+Coverage based testing works by choosing test cases 
+according to well-defined ‘coverage’ criteria. The 
+more common coverage criteria are the following.  
+ Statement Coverage or Node Coverage: Every 
+statement of the program should be exercised at 
+least once.  
+ Branch Coverage or Decision Coverage: Every 
+possible alternative in a branch or decision of the 
+program should be exercised at least once. For if 
+statements, this means that the branch must be made 
+to take on the values true or false.
+Decision/Condition Coverage: Each condition in 
+a branch is made to evaluate to both true and false 
+and each branch is made to evaluate to both true and 
+false.  
+ Multiple condition coverage: All possible 
+combinations of condition outcomes within each 
+branch should be exercised at least once.  
+ Path coverage: Every execution path of the 
+program should be exercised at least once. 
+
+
+
+Cyclomatic Complexity 
+Control flow graph (CFG)  
+A control flow graph describes the sequence in which different 
+instructions of a program get executed. It also describes how the 
+flow of control passes through the program. In order to draw the 
+control flow graph of a program, we need to first number all the 
+statements of a program. The different numbered statements serve 
+as nodes of the control flow graph. An edge from one node to 
+another node exists if the execution of the statement representing the 
+first node can result in the transfer of control to the other node. 
+
+
+
+
+Mutation Testing:
+Mutation Testing is a powerful method 
+for finding errors in software programs. 
+In this technique, multiple copies of 
+programs are made, and each copy is 
+altered; this altered copy is called a 
+mutant. Mutants are executed with test 
+data to determine whether the test data 
+are capable of detecting the change 
+between the original program and the 
+mutated program.
+
+If we run a mutated program, there are two 
+possibilities:  
+1. The results of the program were affected by 
+the code change and the test suite detects it. 
+We assumed that the test suite is perfect, 
+which means that it must detect the change. 
+If this happens, the mutant is called a killed 
+mutant.  
+2. The results of the program are not changed 
+and the test suite does not detect the 
+mutation. The mutant is called an 
+equivalent mutant.  
+
+
+--------------------------------------------------
+
+
+
+Levels of Testing: 
+Mainly, Software goes through three levels of testing:  
+Unit Testing 
+Unit testing is a procedure used to verify that 
+a particular segment of source code is 
+working properly. The idea about unit tests is 
+to write test cases for all functions or 
+methods. Ideally, each test case is separate 
+from the others. This type of testing is mostly 
+done by developers and not by end users.  
+
+Integration testing  
+Integration testing (sometimes called integration 
+and testing, abbreviated I&T) is the phase in software 
+testing in which individual software modules are 
+combined and tested as a group. It occurs after unit 
+testing and before validation testing. Integration 
+testing takes as its input modules that have been unit 
+tested, groups them in larger aggregates, applies tests 
+defined in an integration test plan to those aggregates, 
+and delivers as its output the integrated system ready 
+for system testing. 
+
+System Testing
+System testing done by a professional testing 
+agent on the completed software product before 
+it is introduced to the market. System testing 
+falls within the scope of black box testing, and 
+as such, should require no knowledge of the 
+inner design of the code or logic.  
+As a rule, system testing takes, as its input, all 
+of the "integrated" software components that 
+have passed integration testing and also the 
+software system itself integrated with any 
+applicable hardware system(s).
+
+
+---------------------------
+
+Debugging refers to 
+the process of identifying the cause for defective behavior of a system and 
+addressing that problem. In less complex terms - fixing a bug. When a test case 
+uncovers an error, debugging is the process that results in the removal of the 
+error. The debugging process begins with the execution of a test case. The 
+debugging process attempts to match symptoms with cause, thereby leading to 
+error correction. The following are two alternative outcomes of the debugging:  
+1. The cause will be found and necessary action such as correction or removal 
+will be taken.  
+2. The cause will not be found..
+
+Life Cycle of a Debugging Task:
+A. Defect Identification/Confirmation
+B. Defect Analysis 
+C. Defect Resolution  
+
+---------------------
+
+Change Management 
+ Also called software configuration 
+management (SCM) 
+ It is an umbrella activity that is 
+applied throughout the software 
+process. 
+ It's goal is to maximize productivity 
+by minimizing mistakes caused by 
+confusion when coordinating for 
+software development.
+
+View of SCM from various roles 
+ Project manager : An auditing 
+mechanism set by Project manager 
+ SCM manager : A controlling, tracking, 
+and policy making method. 
+ Software Engineer : A change builder and 
+access control mechanism is set by 
+software engineer. 
+ Customer : Quality assurance product 
+identification method is set by customer. 
+
+------------------
+
+Baseline 
+ An SCM concept that helps practitioners to control 
+change without seriously impeding justifiable change 
+ IEEE Definition: A specification or product that has 
+been formally reviewed and agreed upon, and that 
+thereafter serves as the basis for further development, 
+and that can be changed only through formal change 
+control procedures 
+ It is a milestone in the development of software and is 
+marked by the delivery of one or more computer 
+software configuration items (CSCIs) that have been 
+approved as a consequence of a formal technical 
+review 
+
+Base lining Process 
+A series of software engineering tasks 
+produces a CSCI 
+The CSCI is reviewed and possibly approved 
+The approved CSCI is given a new version 
+number and placed in a project database (i.e., 
+software repository) 
+A copy of the CSCI is taken from the project 
+database and examined/modified by a 
+software engineer 
+The base lining of the modified CSCI goes 
+back to Step #2 
+
+
+
+
+SCM Repositories: Paper-based vs. Automated 
+Repositories 
+ Problems with paper-based repositories (i.e. file 
+cabinet containing folders) 
+ Finding a configuration item when it was needed 
+was often difficult 
+ Determining which items were changed, when 
+and by whom was often challenging 
+ Constructing a new version of an existing 
+program was time consuming and error prone 
+ Describing detailed or complex relationships 
+between configuration items was virtually 
+impossible
+
+Today's automated SCM repository 
+ It is a set of mechanisms and data 
+structures that allow a software team to 
+manage change in an effective manner 
+ It acts as the center for both 
+accumulation and storage of software 
+engineering information 
+ Software engineers use tools integrated 
+with the repository to interact with it 
+
+
+Objectives of Software Change Management Process 
+1) Configuration identification: The process 
+of identification involves identifying each 
+component name, giving them a version 
+name (a unique number for identification) 
+and a configuration identification.  
+2) Configuration control: Controlling changes 
+to a product. Controlling release of a product 
+and changes that ensure that the software is 
+consistent on the basis of a baseline product. 
+3) Review: Reviewing is the process to 
+ensure consistency among different 
+configuration items. 
+4) Status accounting : Recording and 
+reporting all the changes and status of the 
+components.  
+5) Auditing and reporting: Validating the 
+product and maintaining product. 
+
+---------------------
+
+SCM Tasks 
+Status reporting 
+Configuration status reporting (CSR) is also called status accounting 
+Provides information about each change to those personnel in an 
+organization with a need to know 
+Answers what happened, who did it, when did it happen, and what else 
+will be affected? 
+Sources of entries for configuration status reporting 
+ Each time a CSCI is assigned new or updated information 
+ Each time a change is approved by the CCB and an ECO is issued 
+ Each time a configuration audit is conducted
+
+Configuration auditing 
+ Configuration auditing is an SQA activity that 
+helps to ensure that quality is maintained as 
+changes are made 
+ It complements the formal technical review and 
+is conducted by the SQA group 
+
+Version control 
+Change control 
+Identification 
+CSCI
+
+
+-------------------------
+
+_______________________________
+
+
+Development, Testing and Deployment
+ Development of a Web site is not an 
+event. It is a process. Once developed, 
+information in the Web site needs to be 
+maintained. 
+ Testing is the process of evaluating a 
+system or its component(s) with the 
+intent to find whether it satisfies the 
+specified requirements or not. Testing is 
+executing a system in order to identify 
+any gaps, errors, or missing requirements 
+in contrary to the actual requirements. 
+ Software deployment is all of the 
+activities that make a software 
+system available for use. The 
+general deployment process consists 
+of several interrelated activities with 
+possible transitions between them. 
+These activities can occur at the 
+producer side or at the consumer side 
+or both.
+
+
+Web engineering is multidisciplinary and 
+encompasses contributions from diverse 
+areas: System Analysis and Design, 
+software 
+engineering, 
+hypertext 
+engineering, requirements engineering, 
+human-computer 
+interface, 
+interaction, 
+information 
+user 
+engineering, 
+information indexing and retrieval, testing, 
+modeling 
+and 
+simulation, 
+project 
+management, and graphic design and 
+presentation. 
+
+ Web engineering is neither a clone nor a 
+subset of software engineering, although both 
+involve 
+programming 
+and 
+software 
+development. It uses software engineering 
+principles, methodologies, techniques, and 
+tools that are the foundation of Web 
+application development and which support 
+their design, development, evolution, and 
+evaluation.  it encompasses new approaches, 
+methodologies, 
+tools, 
+techniques 
+and 
+guidelines to meet the unique requirements 
+of  web-based applications 
+
+
+----------------------------
+A Formal method in software 
+development is a method that  provides a 
+formal language for describing a software  
+artifact 
+(e.g., 
+specifications, 
+designs, 
+source code)
+Programs are mathematical objects  
+ they are expressed in a formal language;  
+ they have a formal semantics;  
+ programs can be treated as mathematical 
+theories 
+
+
+CASE tools are the software engineering 
+tools that permit collaborative software 
+development and maintenance. CASE 
+tools support almost all the phases of the 
+software development life cycle such as 
+analysis, design, etc., including umbrella 
+activities such as project management, 
+configuration  
+
+CASE tools may support the following development steps:  
+ Creation of data flow and entity models  
+ Establishing a relationship between 
+requirements and models  
+ Development of top-level design  
+ Development of functional and process 
+description  
+ Development of test cases. 
+
+CASE tools are classified into the following categories:  
+1. Upper CASE tools  
+Upper CASE tools mainly focus on the analysis and design 
+phases of software development. 
+2. Lower CASE tools  
+Lower CASE tools support implementation of system 
+development. They include tools for coding, configuration 
+management, etc. 
+3. Integrated CASE tools 
+Integrated CASE tools help in providing linkages between 
+the lower and upper CASE tools. 
+
+
+The CASE tools provide the integrated 
+homogenous environment for the 
+development of complex projects. 
+They allow creating a shared repository 
+of information that can be utilized to 
+minimize the software development 
+time.   Reduce the cost as they automate many 
+repetitive manual tasks.  
+ Reduce development time of the project as 
+they support standardization and avoid 
+repetition and reuse.  
+ Develop better quality complex projects as 
+they provide greater consistency and 
+coordination.  
+ Create good quality documentation  
+ Create systems that are maintainable 
+because of proper control of configuration 
+item that 
+ support traceability requirements. 
+
+CASE tools support the analysis and design phases of software 
+development. Some of the tools supported by the design tools are: 
+Structured Chart 
+Program Document Language (PDL).  
+Optimization of ER and other models 
+Flow charts 
+Database design tools 
+File design tools 
+
+CASE Repository stores
+Data: Information and entities/object 
+relationship attributes, etc.  
+Process: Support structured methodology, 
+link to external entities, document structured 
+software development process standards.  
+Models: Flow models, state models, data 
+models, UML document etc.  
+Rules/Constraints: 
+Business 
+rules, 
+consistency constraints, legal constraints.  
+
+
+
+
+
+
+
+Software Configuration Management 
+(SCM) is extremely important from 
+the view of deployment of software 
+applications 
+SCM 
+controls 
+deployment of new software version 
+SCM should have the following 
+facilities: 
+ Creation of configuration  
+ This documents a software build and enables 
+versions to be reproduced on demand  
+ Configuration lookup scheme that enables 
+only the changed files to be rebuilt. Thus, 
+entire application need not be rebuilt.  
+ Dependency detection features even hidden 
+dependencies, thus ensuring correct behavior 
+of the software in partial rebuilding. 
+
+-----------------------------------------
+
+
+Cleanroom software engineering is an 
+engineering and managerial process for the 
+development of high-quality software with 
+certified 
+reliability. 
+was 
+originally developed by Dr. Harlan Mills. 
+The name “Cleanroom” was taken from the 
+Cleanroom 
+electronics industry, where a physical clean 
+room exists to prevent introduction of 
+defects during hardware fabrication.  
+
+
+Principles For The Cleanroom-based 
+Software Development 
+Incremental development under statistical 
+quality 
+control 
+(SQC): 
+Incremental 
+development as practiced in Cleanroom 
+provides a basis for statistical quality control of 
+the development process. 
+
+Software 
+development 
+based 
+on 
+mathematical principles: In Cleanroom 
+software engineering development, the key 
+principle is that, a computer program is an 
+expression of a mathematical function  
+Software testing based on statistical 
+principles: In Cleanroom, software testing 
+is viewed as a statistical experiment.  
+
+Increment planning: The project plan is 
+built around the incremental strategy.  
+Requirements gathering: Customer 
+requirements are elicited and refined for 
+each increment using traditional methods.  
+Box structure specification: Box 
+structures 
+isolate 
+definition 
+of 
+and separate the 
+behavior, 
+data, 
+procedures at each level of refinement.  
+
+Formal design: Specifications (black
+boxes) are iteratively refined to become 
+architectural designs (state-boxes) and 
+component-level designs (clear boxes).  
+Correctness verification: Correctness 
+questions are asked and answered, formal 
+mathematical verification is used as 
+required.  
+
+
+
+Limitations Of Cleanroom Engineering  
+• Some people believe cleanroom techniques 
+are too theoretical, too mathematical, and too 
+radical for use in real software development.  
+• Relies on correctness verification and 
+statistical quality control rather than unit testing 
+(a major departure from traditional software 
+development).  
+•Organizations operating at the ad hoc level of 
+the Capability Maturity Model do not make 
+rigorous use of the defined processes needed in 
+all phases of the software lifecycle.  
+
+------------------------------------
+
+Software Reuse And Its Types  
+To achieve better software quality, 
+more quickly, at lower costs, software 
+engineers are beginning to adopt 
+systematic reuse as a design process.  
+Application System Reuse  
+Component Reuse  
+Function Reuse 
+
+______________________
+
+Reengineering  
+The Process of transformation of a product 
+with the vision of fulfilling the new business 
+requirements along with the existing 
+requirement is called Software Engineering. 
+Objectives Of Reengineering : 
+Improve quality 
+Migration
+
+Reverse Engineering is a process of 
+redesigning an existing product to 
+improve and broaden its functions, 
+add quality and to increase its 
+useful life.  
+The main aim of reverse 
+engineering is to reduce 
+manufacturing costs of the new 
+software product, making it 
+competitive in market
+
+Why Reverse Engineering   
+The original producer no 
+longer produces the 
+product.  
+As there is inadequate 
+documentation of product. 
+
+Some bad features of the 
+product needs to be 
+redesigned 
+To update obsolete materials 
+with more current, less 
+expensive technologies
+
+Advantages of Reverse Engineering 
+ RE typically starts with measuring an 
+existing object, so that a solid model 
+can be deduced in order to make use of 
+the advantages of CAD/CAM/CAE 
+technologies.  
+ CAD models are used for manufacturing 
+or rapid prototyping applications.
+
+Hence we can work on a product 
+without having prior knowledge of the 
+technology involved. Cost saving for 
+developing new products.  
+Lesser maintenance costs, Quality 
+improvement. & Competitive
+
+
+ Reverse engineering teaches the inner 
+workings of any processor 
+ Learning how the processor handles 
+data helps in understanding many 
+other aspects of computer security
+
+ Reverse engineering is a vast and complex 
+world 
+ With a lot of practice though it becomes much 
+easier 
+ A good reverser knows their tools inside and 
+out 
+ Workflow and organization are the keys to 
+reversing
+
+
+
+Software Reengineering Life Cycle   
+Requirements analysis phase  
+Model analysis phase 
+Source code analysis phase 
+Remediation phase  
+Transformation phase  
+Evaluation phase 
+
+
+
+
+oftware Process Improvement  implies 
+that elements of an effective software 
+process can be defined in an effective 
+manner  
+An existing organizational approach to 
+software development can be assessed 
+against those elements, and a meaningful 
+strategy for improvement can be defined. 
+
+Elements of Process 
+A. People: The people who have the skills, 
+training, and motivation. 
+B. Rules and method: The rule and method 
+to    implement task.  
+C. Tools and Technology: Techniques and 
+tools must be needed. 
+
+RAD Approach
+
+Quality Improvement – The Wheel of 6Sigma
+Visualize –  Understand how it works now and 
+imagine how it will work in the future 
+Commit – Obtain commitment to change from 
+the stakeholders  
+Prioritize – Define priorities for incremental 
+improvements
+Characterize – Define existing process and define the 
+time progression for incremental improvements 
+Improve – Design and implement identified 
+improvements  
+Achieve – Realize the results of the change
+
+
+
+The CMMI Process Improvement Framework 
+ The CMMI framework is the current stage of work on 
+process assessment and improvement that started at 
+the Software Engineering Institute in the 1980s. 
+ The SEI’s mission is to promote software technology 
+transfer particularly to US defence contractors. 
+ It has had a profound influence on process 
+improvement 
+ Capability Maturity Model introduced in the 
+early 1990s. 
+ Revised maturity framework (CMMI) introduced 
+in 2001.
+
+CMMI model components 
+Process areas 
+ 24 process areas that are relevant to process 
+capability and improvement are identified. 
+These are organized into 4 groups. 
+Goals 
+ Goals are descriptions of desirable 
+organizational states. Each process area has 
+associated goals. 
+Practices 
+ Practices are ways of achieving a goal - 
+however, they are advisory and other 
+approaches to achieve the goal may be used. 
+
+The staged CMMI model 
+ Comparable with the software CMM. 
+ Each maturity level has process areas and goals. 
+For example, the process area associated with the 
+managed level include: 
+• Requirements management; 
+• Project planning; 
+• Project monitoring and control; 
+• Supplier agreement management; 
+• Measurement and analysis; 
+• Process and product quality assurance. 
+
+
+------------------------------------------
+
+
+ Michael Hammer and James Champy, 
+entitled Reengineering the Corporation, as 
+the important moment when reengineering 
+became a movement. 
+ "Reengineering" functionally resembles 
+planned change and what people have 
+traditionally called "reorganization," but, 
+in its beginnings, it came with a definite 
+flavor of "starting from scratch," "blank 
+slate," and "from the ground up." 
+
+
+BPR [Business process reengineering] 
+has been described as a radical new 
+approach to business improvement, 
+with the potential to achieve dramatic 
+improvement in business performance. 
+ 
+BPR should not be considered 
+downsizing, restructuring, 
+reorganization, and/or new technology. 
+
+
+
+
+
+
+
+
+
+
+
+------------------------
+Is business process reengineering (BPR) 
+same as business process improvement (BPI)? 
+ On the surface, BPR sounds a lot like 
+business 
+process 
+improvement (BPI). 
+However, there are fundamental differences 
+that distinguish the two. BPI might be about 
+tweaking a few rules here and there.  
+ But reengineering is an unconstrained 
+approach to look beyond the defined 
+boundaries and bring in seismic changes. 
+
+-----------------------------------
+
+What is UML? 
+ A standardized, graphical “modeling language” for 
+communicating software design. 
+ Allows implementation-independent specification of: 
+user/system interactions (required behaviors) 
+partitioning of responsibility (OO) 
+integration with larger or existing systems 
+data flow and dependency 
+operation orderings (algorithms) 
+concurrent operations 
+
+
+UML provides a sketch: to communicate 
+aspects of system 
+ forward design: doing UML before coding 
+ backward design: doing UML after coding 
+as documentation 
+ It act as a blueprint: a complete design to 
+be implemented 
+ sometimes done with CASE (Computer
+Aided Software Engineering) tools
+
+
+Types of Views 
+ Views that are considered when building an 
+object-oriented software system: 
+1. Use Case view – This view exposes the 
+requirements of a system. 
+2. Design View – Capturing the vocabulary. 
+3. Process View – modeling the distribution of 
+the systems processes and threads. 
+4. Implementation view – addressing the 
+physical implementation of the system. 
+5. Deployment view – focus on the modeling the 
+components required for deploying the system
+"
+
+
+given above is my notes for my final semester studies, arrange them systamatically and rewrite them in the most aligned, efficient way to understand each and every topic properly without even ignoring a single sub topic. some topics are missing some important information like definition, kindly add them in order to make a better understanding for the reader THANK YOU 
+don't forget any topic as each topic i wrote is very important as per exam perspective. 
+
+CROSS check if all topics mentioned are there as everything is important 
+
