@@ -1,0 +1,779 @@
+The 3pillars of digital security are:
+• Confidentiality
+• Integrity
+• Availability
+
+Cyberspace typically involves a large computer network made up of 
+many worldwide computer sub networks that employ TCP / IP 
+protocol to aid in communication and data exchange activities.
+
+Security Issues /Breaches in Cyberspace:
+ Unauthorized access– It is accessing computer, computer, network, system or
+device without permission from those who are authorized to access the same.
+• Distributed Denial of Service Attack
+• Adistributed denial of service (DDoS) attack is when an attacker, or
+attackers, attempt to make it impossible for a service to be delivered.
+• This can be achieved by thwarting access to virtually anything: servers,
+devices, services, networks, applications, and even specific transactions
+within applications.
+• It’s one system that is sending the malicious data or requests; a DDoS
+attack comes from multiple systems.
+• Malware, or malicious software, is any program or file that is harmful 
+to a computer user.
+Types of malware can include computer viruses, worms, Trojan 
+horses and spyware.
+• Social engineering attacks
+• It involves some form of psychological manipulation, fooling 
+otherwise unsuspecting users or employees into handing over 
+confidential or sensitive data.
+• Commonly, social engineering involves email or other 
+communication that invokes urgency, fear, or similar emotions in the
+victim.
+• Phishing
+• Phishing attacks attempt to gain sensitive, confidential information 
+such as usernames, passwords, credit card information, network 
+credentials, and more.
+• Crypto Jacking
+• It is a type of cybercrime that involves the unauthorized use 
+of people's devices (computers, smartphones, tablets, or even 
+servers) by cybercriminals to mine for crypto currency.
+• Crypto currency is a virtual currency with no central regulatory or
+issuing authority.
+
+
+
+Some Common Security Issues:
+ Pharming
+• This takes place when the attacker redirects a user from an authentic and 
+genuine site to a fake and deceitful site where their systems are infused 
+with malware.
+
+__________________________________________________________
+
+
+Data Encryption Standard (DES):
+• It was originally developed by IBM and was adopted as an NBS Standard 
+in 1977.
+• DESis a symmetric cryptosystem, so the cipher text is decrypted using 
+the same key.
+• It operates on 64-bit blocks of input at a time.
+• DESuses a 56-bit encryption key, and it’s based on the Feistel Structure 
+that was designed by a cryptographer named Horst Feistel.
+• DESconverts 64-bit blocks of plaintext data into cipher text by dividing 
+the block into two separate 32-bit blocks and applying the encryption 
+process to each independently.
+
+Steps of the DES encryption algorithm operating on 64-bit block are:
+• Theprocess begins with the 64-bit plain text block getting handed over to an
+initial permutation (IP) function.
+• Theinitial permutation (IP) is then performed on the plain text.
+• Next, the initial permutation (IP) creates two halves of the permuted block,
+referred to as Left Plain Text (LPT) and Right Plain Text (RPT).
+• Each LPTandRPTgoesthrough16 roundsof the encryption process.
+• Finally, the LPT and RPT are rejoined, and a Final Permutation (FP) is
+performed on the newly combined block.
+• Theresult of this process produces the desired 64-bit ciphertext
+
+
+ RSA Algorithm:
+• The RSA algorithm is an asymmetric cryptography algorithm; this 
+means that it uses a public key and a private key, a public key is 
+shared publicly, while a private key is secret and must not be shared
+with anyone.
+• They all produced this algorithm, which is totally based on 
+modular mathematics of Number theory. It is an asymmetric 
+cryptography algorithm because it uses two different keys for 
+encoding and decoding. 
+• The RSA algorithm is named after those who invented it in 1978: 
+Ron Rivest,Adi Shamir, and Leonard Adleman.
+
+• Hybrid Encryption is the best of both symmetric and asymmetric encryption, symmetric 
+encryption method is fast for large data encryption but falls short of identity 
+verification. The asymmetric encryption method is quite opposite, it is slow but have 
+public and private key pair which is a must when it comes to cyber safety.
+
+• ADigital Signature is a technique by which it is possible to secure electronic 
+information in such a way that the originator of the information, as well as 
+the integrity of the information, can be verified.
+• This procedure of guaranteeing the origin and the integrity of the 
+information is also called Authentication.
+
+• Electronic Signature: “Authentication of any electronic record 
+by a subscriber by means of the electronic technique specified in 
+the second schedule and includes digital signature.”
+e.g. email signatures, web based signatures, digitized image of a 
+signature.
+• Electronic Signatures has no expiry or validity period unlike a 
+digital signature which is valid up to a maximum of three years. 
+Electronic Signatures are used for verifying a document unlike 
+digital signatures which is used for securing a document.
+
+
+
+
+ Authentication is the process of identifying users and validating who 
+they claim to be.
+• One of the most common and obvious factors to authenticate identity is 
+a password. If the user name matches the password credential, it means
+the identity is valid, and the system grants access to the user.
+
+Authorization occurs after a user's identity has been successfully 
+authenticated.
+• It is about offering full or partial access rights to resources like 
+database, funds, and other critical information to get the job done
+
+
+
+ Someofthe popularhash functionsinclude:
+• TheMessage Digest family comprises of hash functions MD2, MD4, MD5 and MD6.
+It was adopted as Internet Standard RFC 1321. It is a 128-bit hash function.
+• Secure Hash Functions family consists of four SHAalgorithms; SHA-0, SHA-1, 
+SHA-2, and SHA-3.
+• The RIPEMD is an acronymfor RACE Integrity Primitives Evaluation Message 
+Digest. This set of hash functions was devised by open research community and 
+generally known as a family of European hash functions.
+• Whirlpool is a 512-bit hash function which has stemmed from the revised edition of
+Advanced Encryption Standard (AES). One of the designer was Vincent Rijmen, a
+co-creator of the AES.
+
+
+A cryptographic protocol (protocol) is a distributed algorithm defined 
+by a sequence of steps precisely specifying the actions required of
+two or more entities to achieve a specific security objective.
+• Protocols play a major role in cryptography and are
+essential in meeting cryptographic goals.
+• Encryption schemes, digital signatures, hash functions, and 
+random number generation are among the primitives which may
+be utilized to build a protocol
+
+Key establishment is any process whereby a shared secret key 
+becomes available to two or more parties, for subsequent 
+cryptographic use.
+ Key establishment can be broadly subdivided into
+• key agreement
+• key transport
+
+ Keymanagementis the set of processes and mechanisms which 
+support key establishment and the maintenance of ongoing keying
+relationships between authorized parties, including replacing older
+keys with new keys as and when necessary
+• Key management encompasses techniques and procedures supporting:
+• initialization of system users within a domain;
+• generation, distribution, and installation of keying material;
+• controlling the use of keying material;
+• update, revocation, and destruction of keying material; and
+• Storage, backup/recovery, and archival of keying material.
+
+
+
+ Pseudo Random Number Generator (PRNG) refers to an algorithm that uses 
+mathematical formulas to produce sequences of random numbers.
+
+ Pseudo Random Number Generator (PRNG) refers to an algorithm that uses 
+mathematical formulas to produce sequences of random numbers.
+• For example, keys for encryption transformations need to be generated in a
+manner which is unpredictable to an adversary.
+• In cryptographic applications, one of the following steps must be 
+performed:
+• From a finite set of elements, select an element at random.
+• From the set of all sequences (strings) of length over some finite alphabet 
+of symbols, select a sequence at random.
+• Generate a random sequence (string) of symbols of length over a set of  
+symbols.
+
+
+
+APKIstands for Public key Infrastructure in cryptography.
+• The sole purpose of PKI is to facilitate the best secure electronic 
+transfer of information for digital activities.
+• PKI provides assurance of public key. It provides the identification of public
+keys and their distribution.
+APKIstands for Public key Infrastructure in cryptography.
+• The sole purpose of PKI is to facilitate the best secure electronic 
+transfer of information for digital activities.
+• PKI provides assurance of public key. It provides the identification of public
+keys and their distribution.
+
+ DES(Data Encryption Standard) is a encryption algorithm which uses
+• symmetric keys for cipher encryption.
+• It uses 56 bits (+8 parity bits) in 16 rounds having a block size of 64 bits.
+• It has been designed by IBM team
+• It was first published in 1975
+• TRIPLE DESis a symmetric key-block cipher which applies DES cipher in 
+triplicate. It encrypts with first key (K1), decrypts with second key (K2)
+then decrypts with third key (K3). This is also a two-key variant where K1
+and K3 are the same keys
+
+___________________________________
+
+
+Data management is the responsible stewardship of data throughout its lifecycle.
+There are five components to data management:
+• Acquisition
+• Utilization
+• Maintenance
+• Access
+• Protection
+Effective data management requires appropriate acquisition, utilisation, maintenance, 
+access, and protection of data.
+Data management depends on information confidentiality and criticality.
+
+Security Requirements (CIA)
+The three governing principles are as follows:
+• Confidentiality
+• Confidentiality is the ability to hide information from those people unauthorized
+to view it. It is the most obvious aspect of the CIAtriad. Cryptography and 
+Encryption methods are an example of an attempt to ensure confidentiality of 
+data transferred from one computer to another.
+• Integrity
+• The ability to ensure that data is an accurate and unchanged representation of the 
+original secure information. One type of security attack is to intercept some
+important data and make changes to it before sending it on to the intended
+receiver
+• Availability
+• It means information should be 
+consistently and readily 
+accessible for authorized
+parties.
+• This involves properly 
+managing hardware and 
+technical infrastructure and
+systems that hold and display the 
+information
+
+
+
+
+Security Threats and Attack:
+Phishing
+• Phishing attacks use fake communication, such as an email, to trick the
+receiver into opening it and carrying out the instructions inside, such as
+providing a credit card number.
+• "The goal is to steal sensitive data like credit card and login information
+or to install malware on the victim's machine," Cisco reports.
+
+• Cyber-physical attacks
+• The technology that has enabled to modernize and computerize critical
+infrastructure also brings risk.
+• There is an ongoing threat of hacks targeting electrical grids,
+• transportation systems, etc., which represent a major vulnerability.
+
+• Malware
+• Malware is malicious software such as spyware, ransom ware,
+• viruses and worms.
+• Malware is activated when a user clicks on a malicious link or 
+attachment, which leads to installing dangerous software.
+
+• Maninthe middleattack
+• Man in the Middle (MitM) attack occurs when cyber criminals place 
+themselves between a two-party communication.
+• Once the attacker interprets the communication, they may filter and
+• steal sensitive data and return different responses to the user
+
+• State-sponsored attacks
+• Hackers look to make profit through stealing individual and corporate
+• data.
+• Cyber crime today is a major threat not only to the private sector and
+• individuals but also towards the governments and nations as a whole.
+
+
+
+
+
+ Anetwork is a group of connected computers that are able to send data
+to each other.
+
+• The Internet is a vast, sprawling collection of networks that connect to
+each other.
+
+
+ Asingle device that is assigned with an address when it connects to the
+Internet known as the Internet protocol (IP) address and this address helps
+in differentiating between devices in the network form all other devices.
+• Almost every connection to be made with the Internet requires a device
+which includes an address for sending/receiving messages in the form of
+emails.
+• Mobile phones too, operate within a network based on services that
+are provided by service providers. They convert our voice into
+electronic signals which are then transmitted through radio waves
+
+Limitations are as below:
+• Speed
+• Accessibility
+• Incompatibility
+• Leakage of data
+• Use of unsecured Wi-Fi
+• SMishing
+
+
+
+ Security management means minimizing the interruption of business
+activities and reducing the vulnerability to various attacks.
+• There are six principles of security management:
+• Availability
+• Integrity of data or systems
+• Confidentiality of data or systems
+• Accountability
+• Assurance
+• Privacy
+
+
+• AnITsecurity audit is an overall assessment of the organization's.
+• Athorough audit assesses the security of the system's physical
+configuration and environment, software, information handling processes,
+and user practices.
+• Security audits give a reasonable and computable way to scrutinize
+how secure a site really is.
+• Thisassessment is designed to:
+• Create a security benchmark for your organization;
+• Identify the qualities and shortcomings of current security rehearses;
+• Prioritize the exposures that present the most serious hazard;
+
+
+
+
+
+
+
+
+
+ Regulation of the internet can increasingly rely on a three-fold strategy:
+• Privatization:
+• Propertization:
+• Technological Controls the system is to be designed so as to hardware in
+desired regulatory features.
+
+__________________________________
+
+
+ Site blocking filters also may be used a protocol ‘PICS’ developed 
+by the World Wide Web Consortium (‘W3C’) to develop common 
+protocols for the World Wide Web’s evolution and ensure its 
+interoperability.
+
+ Organizations in several countries have established labeling schemes, 
+which conform to the PICS standards, designed for use by parents 
+and schools
+• In1997W3Ccreatedthe ‘MetadataActivity’, which includes the 
+Resource Description Framework (RDF) Working Group.
+
+• RDF is a protocol for description of Internet content based on a set of 
+105 ‘categories’ of information, known as the ‘Dublin Core’, which 
+is used to Filter out obscene content.
+
+___________________________________
+
+
+
+UNCITRALModelLaw,1996
+• TheUNCITRALModelLawonElectronic Commerce was adopted by the
+• United Nations Commission on International Trade Law (UNCITRAL) in 1996.
+• Thespecific goal is to eliminate all kinds of legal and other technical kinds of 
+hindrances.
+• Andtoboostlegal certainty for the cyber domain has postulated a series of 
+internationally acceptable rules though it does not regulate every single phase of
+transactions done electronically.
+• Ithas embraced the following doctrines:
+• Non discrimination principle
+• Technological neutrality principle
+• Thelast is the equivalence functional principle
+• Allthe states have tries to incorporate the UNCITRAL rules so as to
+bring uniformity in the laws.
+• This Model Law has been divided into two parts:
+• Part 1 deals with general provisions regarding e-commerce
+• Part 2 deals with specific provisions for e-commerce in certain 
+areas.
+
+
+
+
+
+
+United States
+• Cyber regulation in the United States is composed of assorted 
+laws, executive orders, court rulings, government programs, 
+technological standards and national security directives, which 
+were added during the last thirty years.
+• The starting point for understanding the accumulation of federal
+cyber regulations over time is the Comprehensive Crime Control Act
+of 1984.
+
+Communication DecencyAct 1996 (CDA)
+• TheCDAcreated a criminal cause of action against those who knowingly 
+transmit “obscene” or “indecent” messages, as determined by
+• local community standards, to a recipient under the age of 18 years.
+• Theprovisions also prohibited a person from knowingly permitting a 
+telecommunications facility under that person’s control to be used to 
+commit these offences.
+
+
+CIPA
+• In2000, Children Internet Protection Act (CIPA) was passed. This Act 
+requires the schools and libraries to install filters on computers used by 
+minors and adults.
+
+
+Other Related Legislation
+• Uniform Electronic Transaction Act, 1999 (UETA)
+• Uniform Computer Information Transaction Act, 2000 (UCITA)
+• Health Insurance Portability and Accountability Act of 1996  (HIPAA)
+• Fair Credit Reporting Act, 1970
+
+
+
+
+
+
+Other Related Legislation
+• Uniform Electronic Transaction Act, 1999 (UETA)
+• Uniform Computer Information Transaction Act, 2000 (UCITA)
+• Health Insurance Portability and Accountability Act of 1996  (HIPAA)
+• Fair Credit Reporting Act, 1970
+
+
+
+
+European Union
+• In September 1996, UK Government issued R3 Safety-Net action 
+plan developed by UK ISP trade associations.
+• TheUK's cyber security mission is led by the National Cyber Security
+Centre (NCSC), which is a part of GCHQ.
+• TheNCSChelps protect the UK's critical services from cyber attacks, 
+manages major incidents, and improves the underlying security of the
+UK Internet through technological improvement and advice to citizens
+and organizations.
+• Itsupports the most critical organizations in the UK, the wider public 
+sector, industry and small and medium enterprises (SMEs).
+
+• InIndia, Information TechnologyAct, 2000 is the legislation which covers
+the domain of cyber law.
+• Themainobjective of theAct is to provide legal recognition for
+transactions carried out by means of electronic data interchange and
+electronic communication, commonly referred to as ecommerce, which
+involve the use of alternatives to paper-based methods of communication
+and storage of information to facilitate electronic filing of documents with
+the Government agencies
+
+• Electronic Signatures
+• Electronic Governance
+• Regulation of CertifyingAuthorities
+• Digital Signature Certificate
+• Penalties andAdjudication
+• TheAppellate Tribunal
+• Offences
+
+
+
+
+
+
+ InJuly1997, the German Government hosted an
+• International Conference in Bonn on the topic ‘Global Information Networks’, in
+cooperation with the European Commission that resulted in the adoption of the
+‘Bonn Declaration’of the Ministers as well as declarations by industry and user
+participants. The Bonn Declaration pointed in the direction of:
+• using current national legal frameworks for the enforcement of criminal
+• law provisions where appropriate in respect of on-line crime;
+• development by industry of common principles for schemes of self
+regulation regarding content of on-line services; and
+• establishment of national hotlines for complaints regarding on-line content
+and for some appropriate interconnection and interaction between national
+hotlines
+
+
+TheOECDaninternational organization working in the area of data
+privacy and information security, established an ad hoc process of
+meetings (the first was on 1-2 July 1997 and second on 22 October
+1997).
+• Themeeting acknowledged the primary role of the private
+sector in regulating the Internet.
+• On 19 April 2006, OECD task force on spam has recommended that 
+Governments and industry should step up their coordination to
+combat the global problem of spam.
+• Co-ordination and co-operation between public and private sectors
+are critical, the report notes.
+
+
+ TheUnited Nations Educational, Scientific and Cultural Organization
+(UNESCO) was founded on 16 November 1945.
+• Atthe 29th UNESCO General Conference held in Paris from 21 October to
+12 November 1997.
+• Today, UNESCO functions as a laboratory of ideas and a standard
+setter to forge universal agreements on emerging ethnical issues:
+• The organization also serves as a clearing house for the dissemination and
+sharing of information and knowledge
+• It helps Member States to build their human and institutional capacities in 
+diverse fields.
+
+
+_______________________________
+
+
+• Thecyber crimes are broadly classified into different groups:
+• Crime against the individuals– Harassment, cyber-stalking,
+deformation, indecent exposure, cheating, email spoofing, fraud, etc.
+• Crimeagainst property– Transmitting virus, net-trespass, unauthorized 
+control over computer system, internet thefts, infringement of intellectual 
+property, etc.
+• Crimeagainst organization– Cyber terrorism within government 
+organization, possession of unauthorized information, distribution of pirate 
+software, etc.
+• Crime against society– Child pornography, financial crimes, sale of
+unlawful articles, trafficking, forgery of records, gambling, etc.
+• Cyber crimes are quite different from traditional crimes as they are often
+harder to detect, investigate and prosecute and because of that cyber crimes
+cause greater damage to society than traditional crimes.
+• Cyber crime also includes traditional crimes conducted through the
+internet or any other computer technology. For example; defamation,
+forgery, identity theft, terrorism, cyber-stalking, hacking, software piracy,
+web jacking and bullying are considered to be cyber crimes when
+traditional crimes are committed through the use of a computer and the
+internet.
+• Section 43 to 45 of Information Technology Act, 2000 provides for the
+instances where the wrong doer is liable to pay damages by way of
+compensation to the effected party.
+• Section 66 of Information Technology Act, 2000 however provides that if
+any person, dishonestly or fraudulently, does any act referred to in
+section 43, he or shall be punishable with imprisonment for a term which
+may extend to three years or with fine which may extend to five lakh
+rupees or with both.
+
+
+
+Following acts are considered as offences under the act:
+• Section 65 provides for tampering, concealing, destroying , or altering any
+computer source document intentionally. Penalty is up to Rs.2,00,000/-, or
+Imprisonment up to 03 (three) years, or both.
+• Section 66 provides for dishonestly, or fraudulently doing any act as referred in
+Section 43. Penalty is up to Rs.5,00,000/-, or Imprisonment up to 03 (three)
+years, or both.
+• Section 66Ahas been struck down by Supreme Court’s Order dated 24th March,
+2015 in the landmark precedent of “Shreya Singhal vs. Union of India”, AIR 2015
+SC.1523.25. The court found it as violation of the Freedom of Speech and
+Expression guaranteed under the Constitution of India.
+• Section 66B provides for dishonestly, or fraudulently receiving or retaining
+any stolen computer resource or communication device. Penalty is up to
+Rs.1,00,000/-, or Imprisonment up to 03 (three) years, or both.
+• Section 411 of the IPC, 1860 provides punishment for dishonestly receiving
+stolen property and is worded in a manner that is almost identical to
+section 66B of the IT Act. The punishment under section 411 of the IPC is
+imprisonment of either description for a term of up to 3 years,
+• Section 66C provides for dishonestly, or fraudulently making use of
+Electronic Signature, Password or any other Unique Identification Feature
+of any other person. Penalty is up to Rs.1,00,000/-, or Imprisonment up to
+03 (three) years, or both.
+• Section 66D provides for dishonestly, or fraudulently by means of
+any communication device or computer resource cheating by
+personating. Penalty up to Rs.1,00,000/-, or Imprisonment up to 03
+(three) years, or both.
+• Section 419 of the IPC, 1860 provides punishment for 'cheating by
+personating' and provides that any person who cheats by personating
+shall be punished with imprisonment of either description for a term
+which may extend to 03 (three) years or with a fine or with both.
+• Section 420 of the IPC, 1860 provides for any person who cheats
+and thereby dishonestly induces the person deceived to deliver any
+property to any person, or to make, alter or destroy the whole or any part
+of a valuable security, or anything which is signed or sealed, and which is
+capable of being converted into a valuable security shall be punished with
+imprisonment of either description for a term which may extend to 07
+(seven) years, and shall also be liable to fine.
+• Section 66E of Information Technology Act, 2000 provides for intentionally
+capturing, publishing, or transmitting image of private area of any person
+without consent. Penalty is up to Rs.2,00,000/-, or Imprisonment up to 03
+(three) years, or both.’etc.
+
+
+
+Cyber forensic techniques include:
+• Cross-driven analysis that correlates 
+data from multiple hard drives.  
+• Live analysis, which obtains data 
+acquisitions before a PC is shut     
+down. 
+• Deleted file recovery.
+• Detecting data theft using Stochastic 
+Forensics.
+• Concealing a file, message, image, or 
+video within another file using  
+Steganography
+
+Computer forensic investigations go through five major standard 
+digital forensic phases:
+• Policy and procedure development, 
+• Assessment,
+• Acquisition, 
+• Examination
+• Reporting
+
+
+
+
+________________________________
+
+Management of Intellectual Property Rights:
+There are basically seven forms of intellectual property: copyright and 
+related rights; trademarks, patent, industrial design, geographical 
+indications, trade secrets and plant variety.
+I.
+Copyright and related rights
+• Acopyright is used to protect creative literary, musical, dramatic, or other
+artistic works like cinematographs films and sound recordings inclusive of
+musical compositions, audio recordings, paintings, photos, sculptures,
+books, articles, diagrams, movies, website content and even computer
+software and programs though the inventions related to software are
+protected under patent law.
+II. Patents
+• Apatent is an exclusive right granted to protect an invention which is a product
+or a process and can also be applicable to newly engineered plant species or
+strain however a discovery, scientific theory or mathematical method is
+excluded from patentability, but its application or use can be patentable
+
+ There are certain products or process which are Novel and have Industrial
+application and are protected as Utility Model not as patent, for a shorter
+period, generally 10 years and do not require inventive step as the
+protection requirement like patents.
+
+III. Trademarks
+• A trademark is a distinctive sign, word, symbol or mark used in trade to 
+distinguish the goods or services. Trademarks help consumers to identify
+the source of products or services. It could be name, signature, logo, brand
+label, phrase, slogan, letter, a numeral or any combination of them.
+• For registration of trademark, it should be (i) distinctive in nature
+(distinguishable from other goods and service). Registration of trade mark
+is valid for specific period and needs to be renewed.
+
+iv. Industrial designs Consists of appearance of a product/logo; the shape of
+an object; composition of design, pattern of cloth. The industrial design
+may have three-dimensional features, such as the shape or surface of an
+article, or two-dimensional features, such as patterns, lines or color.
+
+V. Geographical Indication (GI)
+• It is a name or sign used on certain products which corresponds to a
+specific geographical location or origin (e.g. a region, or country). A
+Geographical Indication should have special quality or reputation.
+• Geographical indications are typically used for agricultural products, food
+stuffs,
+wine and spirit drinks, handicrafts, and industrial products.
+Examples: Basmati rice, Swiss watches, Ethiopian coffee, Tequila for
+spirits produced in Mexico, Electrical appliance Made in UK.
+
+VI. Trade Secrets
+• A trade secret is any confidential secret information having inherent
+economic advantage to company and is used in business that gives a
+competitive edge by reason of it being secret. Examples include formulae,
+practice, program, process, recipes, pattern, technique, compilation,
+method, and device or product mechanism.
+
+
+
+________________________________
+
+Linking, In-liningAnd Framing
+ Linking" allows a Web site user to visit another location on the Internet. By
+simply clicking on a "live" word or image in one Web page, the user can 
+view another Web page elsewhere in the world, or simply elsewhere on the
+same server as the original page.
+• This technique is what gives the Web its unique communicative power. At the 
+same time, however, linking may undermine the rights or interests of the 
+owner of the page that is linked to. 
+• Suppose, for example, that X sets up a homepage for her site. On the
+homepage she places some advertisements, from which she hopes to make
+some money. The homepage also contains links to various subordinate
+pages, which contain content that X believes consumers would like to see.
+• Y then creates his own Web site, which contains links to X's subordinate 
+pages. The net result is that visitors to Y's site will be able to gain access 
+to X's material, without ever seeing X's advertisements. This type of 
+activity is called "deep linking.” (Intellectual Property in
+Cyberspace(harvard.edu)).
+• In-lining : "In-lining" is the process of displaying a graphic file on one 
+website that originates at another. For example, in-lining occurs if a user at 
+site A can, without leaving site A, view a "cartoon of the day" featured on
+site B. IMG links-- a special type of link- can be used to display graphic
+files on one site that are stored on another”.
+(Playboy Enterprises v- NYU Law)
+
+• Framing : "Framing" is the process of allowing a user to view the contents
+of one website while it is framed by information from another site, similar
+to the "picture-in-picture" feature offered on some televisions. Framing
+may trigger a dispute under copyright and trademark law theories, because
+a framed site arguably alters the appearance of the content and creates the
+impression that its owner endorses or voluntarily chooses to associate with
+the framer”. (Playboy Enterprises v- NYU Law).
+• In Futuredontics Inc. v. Applied Anagramic Inc, 2007, A district court
+ruled that the addition of the reproduced Web pages within a “frame” by
+dental website containing contents of other website.
+
+
+
+ The Copyright expires after 60 years from the end of the calendar year in
+which the author dies Literary, dramatic, musical or artistic works;
+• The Copyright shall subsist until 60 years from the beginning of the
+calendar year following the year in which the film/sound recording/
+photographs/ computer programs is made available or first published as the
+case may be to the public.
+• The act provides economic rights under sec 14 of act to commercially
+exploit his creation and also grants moral rights as envisaged under
+Section 57 of the Act which are special rights of the author of the work
+viz.
+
+
+
+Trade Marks Act (TMA), 1999 protects the rights of the trademark owners
+or business entities for a term of 10 years from the date of application,
+renewable every 10 years on payment of the requisite fee
+
+
+
+
+
+Legal Protection in India
+• Threetypes of remedies are available against infringement of IPR
+• CivilRemedies- injunctions, damages, rendition of accounts, expert
+order, seizure, destruction or forfeiture of infringing goods.
+• Criminal remedies- section 63 of the Copyright Act, 1957 deals with 
+Offences of infringement of copyright and Chapter XII of the Trademarks 
+Act, 1999 deals with offences, penalties and procedures pertaining to
+trademark infringement.
+• Administrative Remedies- import/ export of goods including protection
+of patents, trademarks and copyrights under Indian Customs Act, 1962.
+
+• The geographical Indications of (Registration and Protection) Act, 
+1999 for Laws relating to Geographical Indication; Information 
+Technology Act, 2000 deals with electronic records
+
+
+
+International scenario
+• Important treaties which provide international protection to Copyright are:
+• BerneConvention for protection of Literary and Artistic Works, 1886.
+• Universal Copyright Convention, 1952.
+• Agreement on Trade related Aspects of Intellectual Property Rights,1994.
+• The purpose of making these treaties is to create uniformity in dealing 
+with the disputes related to the Intellectual Property Rights, because 
+copyright is governed within the country according to the internal laws of 
+the country and with the help of these treaties, uniform protection is given 
+to all member countries of that particular treaty.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
